@@ -7,15 +7,9 @@ from pydantic import BaseModel
 from typing import List, Optional
 from enum import Enum
 
-# ==========================================
-# SYSTEM LOGGING CONFIGURATION
-# ==========================================
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("vault_unified_system")
 
-# ==========================================
-# NESTED WORKSPACE ABSOLUTE PATH RESOLUTION
-# ==========================================
 CURRENT_SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 BASE_DIR = CURRENT_SCRIPT_DIR
@@ -51,17 +45,11 @@ CORS(app, supports_credentials=True, origins=[
     'http://127.0.0.1:5000', 'http://localhost:5000'
 ])
 
-# ==========================================
-# DATABASE RECOVERY ENGINE CONFIGURATION
-# ==========================================
 app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(CURRENT_SCRIPT_DIR, 'vault_test.db')}"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-# ==========================================
-# DATA REPOSITORY ORM MODELS (SQLITE)
-# ==========================================
 class Book(db.Model):
     __tablename__ = 'books'
     id = db.Column(db.Integer, primary_key=True)
@@ -90,7 +78,6 @@ class ShelfItem(db.Model):
     description = db.Column(db.Text, default='')
     privacy = db.Column(db.String(20), default='public')
 
-    # Establish relationship to fetch book info easily
     book = db.relationship('Book', backref=db.backref('shelf_items', lazy=True))
 
     def to_dict(self):
@@ -106,9 +93,6 @@ class ShelfItem(db.Model):
             "book_details": self.book.to_dict() if self.book else None
         }
 
-# ==========================================
-# PYDANTIC INPUT VALIDATION PIPELINES
-# ==========================================
 class ShelfTypeEnum(str, Enum):
     READING = "READING"
     COMPLETED = "COMPLETED"
@@ -162,11 +146,6 @@ def render_library():
 @app.route('/profile.html')
 def render_profile():
     return render_template('profile.html')
-
-
-# ==========================================
-# SYSTEM API ENDPOINTS
-# ==========================================
 
 # 1. ADD OR UPDATE BOOK IN LIBRARY
 @app.route('/api/v1/library', methods=['POST'])
@@ -226,8 +205,7 @@ def add_to_library():
         return jsonify({"error": "Internal database error", "details": str(e)}), 500
 
 
-# 2. GET USER'S SHELF ITEMS (Filterable by shelf_type via Query Parameter)
-# Example: /api/v1/library?user_id=123&shelf_type=READING
+# 2. GET USER'S SHELF ITEMS 
 @app.route('/api/v1/library', methods=['GET'])
 def get_library():
     user_id = request.args.get('user_id')
@@ -257,12 +235,10 @@ def update_shelf_item(item_id):
             return jsonify({"error": "Shelf item not found"}), 404
 
         try:
-            # Partial validation
             validated_data = UpdateShelfItemRequest(**data)
         except Exception as validation_err:
             return jsonify({"error": "Validation Failed", "details": str(validation_err)}), 400
 
-        # Update only properties provided in payloads
         if validated_data.shelf_type is not None:
             item.shelf_type = validated_data.shelf_type.value
         if validated_data.genre is not None:
@@ -283,7 +259,6 @@ def update_shelf_item(item_id):
 
 
 # 4. REMOVE ITEM FROM SHELF
-# Example: DELETE /api/v1/library/1
 @app.route('/api/v1/library/<int:item_id>', methods=['DELETE'])
 def remove_from_library(item_id):
     try:
@@ -304,11 +279,8 @@ with app.app_context():
     db.create_all()
 
 if __name__ == '__main__':
-    print("\n==================================================")
-    print("     BIBLIODRIFT ENGINE INTERFACE MATRIX        ")
-    print("==================================================")
+    print("BIBLIODRIFT")
     print(f" Execution Base Context:  {BASE_DIR}")
     print(f" Template Location Pages: {PAGES_DIR}")
     print(f" Asset Directory Mount:   {FRONTEND_DIR}")
-    print("--------------------------------------------------")
     app.run(host='127.0.0.1', port=5001, debug=True, use_reloader=False)
