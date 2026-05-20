@@ -5347,46 +5347,46 @@ html, body {
 
 #sc-glow-outer {
   width: 120px; height: 120px;
-  background: radial-gradient(circle, rgba(180,120,70,0.40) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(93,64,55,0.25) 0%, transparent 70%);
   filter: blur(18px);
   mix-blend-mode: normal;
   z-index: 99996;
 }
 #sc-glow-mid {
   width: 60px; height: 60px;
-  background: radial-gradient(circle, rgba(180,120,70,0.55) 0%, rgba(180,120,70,0.20) 50%, transparent 75%);
+  background: radial-gradient(circle, rgba(93,64,55,0.40) 0%, rgba(93,64,55,0.15) 50%, transparent 75%);
   filter: blur(8px);
   mix-blend-mode: normal;
   z-index: 99997;
 }
 #sc-glow-inner {
   width: 24px; height: 24px;
-  background: radial-gradient(circle, rgba(180,120,70,0.85) 0%, transparent 100%);
+  background: radial-gradient(circle, rgba(93,64,55,0.60) 0%, transparent 100%);
   filter: blur(4px);
   mix-blend-mode: normal;
   z-index: 99998;
 }
 #sc-dot {
   width: 9px; height: 9px;
-  background: #7A4A28;
+  background: #5d4037;
   opacity: 1;
   z-index: 99999;
 }
 
-@media (prefers-color-scheme: dark) {
-  #sc-glow-outer {
-    background: radial-gradient(circle, rgba(212,184,150,0.12) 4%, transparent 70%);
-    mix-blend-mode: normal;
-  }
-  #sc-glow-mid {
-    background: radial-gradient(circle, rgba(212,184,150,0.25) 0%, rgba(212,184,150,0.07) 50%, transparent 75%);
-    mix-blend-mode: normal;
-  }
-  #sc-glow-inner {
-    background: radial-gradient(circle, rgba(212,184,150,0.5) 0%, transparent 75%);
-    mix-blend-mode: normal;
-  }
-  #sc-dot { background: #D4B896; }
+[data-theme="night"] #sc-glow-outer {
+  background: radial-gradient(circle, rgba(212,184,150,0.12) 4%, transparent 70%);
+  mix-blend-mode: normal;
+}
+[data-theme="night"] #sc-glow-mid {
+  background: radial-gradient(circle, rgba(212,184,150,0.25) 0%, rgba(212,184,150,0.07) 50%, transparent 75%);
+  mix-blend-mode: normal;
+}
+[data-theme="night"] #sc-glow-inner {
+  background: radial-gradient(circle, rgba(212,184,150,0.5) 0%, transparent 75%);
+  mix-blend-mode: normal;
+}
+[data-theme="night"] #sc-dot {
+  background: #D4B896;
 }
 
 @media (hover: none) {

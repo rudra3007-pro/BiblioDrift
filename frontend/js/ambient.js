@@ -258,12 +258,14 @@ document.addEventListener('DOMContentLoaded', () => {
 (function () {
   'use strict';
 
-  const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
   const isTouchOnly = window.matchMedia('(hover: none)').matches;
 
-  const COLORS_LIGHT = ['#B46A2A','#C8844E','#D49A60','#A05A20','#E0B080','#C87840'];
-  const COLORS_DARK  = ['#E8D5B7','#C9A87C','#F0E0C8','#B8956A','#D4B896','#F5ECD8'];
-  const COLORS = isDark ? COLORS_DARK : COLORS_LIGHT;
+  function getColors() {
+    const isNight = document.documentElement.getAttribute('data-theme') === 'night';
+    const COLORS_LIGHT = ['#5D4037','#4A362E','#6D4C41','#3E2723','#8D6E63','#5C4033'];
+    const COLORS_NIGHT = ['#E8D5B7','#C9A87C','#F0E0C8','#B8956A','#D4B896','#F5ECD8'];
+    return isNight ? COLORS_NIGHT : COLORS_LIGHT;
+  }
 
   function rand(a, b) { return a + Math.random() * (b - a); }
   function lerp(a, b, t) { return a + (b - a) * t; }
@@ -271,7 +273,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function spawnSparkle(x, y) {
     const el    = document.createElement('div');
-    const color = pick(COLORS);
+    const color = pick(getColors());
     const size  = rand(10, 22);
     const angle = rand(0, Math.PI * 2);
     const dist  = rand(20, 55);
